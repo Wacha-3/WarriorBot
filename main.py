@@ -1,3 +1,5 @@
+import discord
+
 class Enemy:
     def introduce_self(self):
         print(self.name)
@@ -14,7 +16,7 @@ maxHealth = e.health
 print('Prepare to face ' + e.name + ': ('+str(maxHealth)+'/'+ str(maxHealth)+')')
 
 while e.health >= 1:
-    e.health = e.health - int(input('Damage: '))
+    e.health = e.health - int(input('Damage: ')) 
     print('HP: ('+str(e.health)+('/')+str(maxHealth)+')')
 
 print(e.name + ' has been defeated good work warrior!!')
