@@ -48,19 +48,27 @@ def RepresentsInt(s):
 #When a message is sent
 @client.event
 async def on_message(message):
-
+  global gameRunning 
+  global UserNumThatSentMsg 
+  for x in range(len(currentPlayers)):  
+        if message.author.name == currentPlayers[x]:
+          UserNumThatSentMsg = x
+          break
+        elif message.author.name == currentPlayers[0]:
+          UserNumThatSentMsg = 0
+          break
   if message.author == client.user:
-    return
-    global gameRunning 
-    global UserNumThatSentMsg 
-    
+      return
+      
 
-    
+      
+     
 
   elif message.content.startswith('$start'):     
        gameRunning = 1
-  elif message.content.startswith('$stop'):
+  elif message.content.startswith('$start'):  
        gameRunning = 0
+  elif message.content.startswith('$score'):
        for x in range(len(playerList)):
         await message.channel.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')
 
@@ -72,23 +80,16 @@ async def on_message(message):
         #Takes the name of players and adds it into a list
   elif message.content.startswith('$join'):    
 
-    UserNumThatSentMsg = 0
-    for x in range(len(playerList)):  
-      if message.author.name == playerList[x].name:
-         UserNumThatSentMsg = x
-      elif message.author.name == playerList[0].name:
-         UserNumThatSentMsg = 0
-
     if currentPlayers.count(message.author.name) == 0:
 
          playerList.append(Player(message.author.name)) #append the array and create a Player object
          currentPlayers.append(message.author.name) 
-         await message.channel.send(playerList[UserNumThatSentMsg].name + ' has joined the arena!') #sends the name 
+         await message.channel.send(message.author.name + ' has joined the arena!') #sends the name 
          global enemy
          enemy = Enemy('Goblin',len(playerList)*75) #####change this multiplier to something scalable for each
             
     else:  
-         await message.channel.send(playerList[UserNumThatSentMsg].name + ' has already joined the arena!') #sends the name 
+         await message.channel.send(message.author.name + ' has already joined the arena!') #sends the name 
 
 
 
@@ -104,7 +105,12 @@ async def on_message(message):
           enemy.health = enemy.health - int(dmg)
           await message.channel.send(message.author.name + ' has dealt'+ dmg +' damage!')
           await message.channel.send(str(enemy.health) + '/' + str(enemy.maxHealth))
-                 
+          if (enemy.health <= 0):
+            message.channel.send(enemy.name + 'has been defeated! Great job warriors :crossed_swords:')
+            gameRunning = 0
+            for x in range(len(playerList)):
+              await message.channel.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')     
+            message.channel.send('The next enemy will be the boss monster "GIANT CRAB"')
 
 
 
@@ -116,6 +122,7 @@ async def on_message(message):
 
   elif message.content.startswith('$bg'):
        await message.channel.send(playerList[-1].name)
+       await message.channel.send(playerList[UserNumThatSentMsg].name)
        await message.channel.send(len(playerList))    
 #  elif message.content.startswith('$'):
    #  await message.channel.send('Invalid Syntax ' + message.author.name)
