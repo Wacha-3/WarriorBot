@@ -5,6 +5,7 @@ import datetime
 today = datetime.datetime.now()
 client = discord.Client()
 playerList = []  #initialise the array
+currentPlayers = []
 
 
 class Enemy:
@@ -50,44 +51,74 @@ async def on_message(message):
 
   if message.author == client.user:
     return
+    global gameRunning 
+    global UserNumThatSentMsg 
+    
 
+    
 
-
-       
-
-  elif message.content.startswith('$start'):
-       global gameRunning 
+  elif message.content.startswith('$start'):     
        gameRunning = 1
   elif message.content.startswith('$stop'):
        gameRunning = 0
-       for x in playerList:
-        await message.channel.send(playerList[0].name + ' has dealt '+ str(playerList[0].damageDealt) +' damage in total!')
+       for x in range(len(playerList)):
+        await message.channel.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')
+
+
+
+
+
 
         #Takes the name of players and adds it into a list
-  elif message.content.startswith('$join'):
-        playerList.append(Player(message.author.name)) #append the array and create a Player object
-        await message.channel.send(playerList[-1].name + ' has joined the arena!') #sends the name 
-        global enemy
-        enemy = Enemy('Goblin',len(playerList)*75) #####change this multiplier to something scalable for each
-       
+  elif message.content.startswith('$join'):    
+
+    UserNumThatSentMsg = 0
+    for x in range(len(playerList)):  
+      if message.author.name == playerList[x].name:
+         UserNumThatSentMsg = x
+      elif message.author.name == playerList[0].name:
+         UserNumThatSentMsg = 0
+
+    if currentPlayers.count(message.author.name) == 0:
+
+         playerList.append(Player(message.author.name)) #append the array and create a Player object
+         currentPlayers.append(message.author.name) 
+         await message.channel.send(playerList[UserNumThatSentMsg].name + ' has joined the arena!') #sends the name 
+         global enemy
+         enemy = Enemy('Goblin',len(playerList)*75) #####change this multiplier to something scalable for each
+            
+    else:  
+         await message.channel.send(playerList[UserNumThatSentMsg].name + ' has already joined the arena!') #sends the name 
+
+
+
+
+
 
         #checks if $d was used and then adds damage to the monster and the players total
-  elif message.content.startswith('$d') & gameRunning:
+  elif message.content.startswith('$d'):
        dmg = message.content.replace("$d", "")
                     #checks if it is an int then if it is prints the values
        if RepresentsInt(dmg) and int(dmg) >= 0 and int(dmg) <= 100:           
-          playerList[0].damageDealt =  playerList[0].damageDealt + int(dmg)    
+          playerList[UserNumThatSentMsg].damageDealt =  playerList[UserNumThatSentMsg].damageDealt + int(dmg)    
           enemy.health = enemy.health - int(dmg)
-          await message.channel.send(playerList[0].name + ' has dealt'+ dmg +' damage!')
+          await message.channel.send(message.author.name + ' has dealt'+ dmg +' damage!')
           await message.channel.send(str(enemy.health) + '/' + str(enemy.maxHealth))
                  
+
+
+
   elif message.content.startswith('$hp'):
        await message.channel.send(str(enemy.health) + '/' + str(enemy.maxHealth))
-
   
-            
-  elif message.content.startswith('$'):
-     await message.channel.send('Invalid Syntax ' + message.author.name)
+
+
+
+  elif message.content.startswith('$bg'):
+       await message.channel.send(playerList[-1].name)
+       await message.channel.send(len(playerList))    
+#  elif message.content.startswith('$'):
+   #  await message.channel.send('Invalid Syntax ' + message.author.name)
 
 
 
