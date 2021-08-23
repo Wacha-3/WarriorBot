@@ -106,11 +106,11 @@ async def on_message(message):
           await message.channel.send(message.author.name + ' has dealt'+ dmg +' damage!')
           await message.channel.send(str(enemy.health) + '/' + str(enemy.maxHealth))
           if (enemy.health <= 0):
-            message.channel.send(enemy.name + 'has been defeated! Great job warriors :crossed_swords:')
+            await message.channel.send(enemy.name + 'has been defeated! Great job warriors :crossed_swords:')
             gameRunning = 0
             for x in range(len(playerList)):
               await message.channel.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')     
-            message.channel.send('The next enemy will be the boss monster "GIANT CRAB"')
+            await message.channel.send('The next enemy will be the boss monster "GIANT CRAB"')
 
 
 
