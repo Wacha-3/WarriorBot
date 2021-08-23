@@ -12,7 +12,7 @@ class Enemy:
     def __init__(self, name, maxHealth): 
        self.name = name
        self.maxHealth = maxHealth
-       self.health = maxHealth
+       self.health = 0
       
 
     def introduce_self(self):
@@ -50,6 +50,7 @@ def RepresentsInt(s):
 async def on_message(message):
   global gameRunning 
   global UserNumThatSentMsg 
+  global totalDmgSum
   for x in range(len(currentPlayers)):  
         if message.author.name == currentPlayers[x]:
           UserNumThatSentMsg = x
@@ -85,9 +86,20 @@ async def on_message(message):
          playerList.append(Player(message.author.name)) #append the array and create a Player object
          currentPlayers.append(message.author.name) 
          await message.channel.send(message.author.name + ' has joined the arena!') #sends the name 
+         
          global enemy
-         enemy = Enemy('Goblin',len(playerList)*75) #####change this multiplier to something scalable for each
-         await message.channel.send(enemy.name + ' has grown in strength '+ str(enemy.health) + '/' + str(enemy.maxHealth))
+         if len(currentPlayers) == 1:
+          global hpScale
+          hpScale = 75
+          enemy = Enemy('Crab',len(playerList)*hpScale) #change this multiplier to something scalable for each\
+          await message.channel.send('A ' +enemy.name + ' has apeared in the arena! :crossed_swords:')
+          
+          enemy.health = enemy.maxHealth
+
+         else:
+          enemy.health = enemy.health + hpScale
+          enemy.maxHealth = enemy.maxHealth + hpScale
+          await message.channel.send(enemy.name + ' has grown in strength '+ str(enemy.health) + '/' + str(enemy.maxHealth))
             
     else:  
          await message.channel.send(message.author.name + ' has already joined the arena!') #sends the name 
@@ -107,11 +119,12 @@ async def on_message(message):
           await message.channel.send(message.author.name + ' has dealt'+ dmg +' damage!')
           await message.channel.send(str(enemy.health) + '/' + str(enemy.maxHealth))
           if (enemy.health <= 0):
-            await message.channel.send(enemy.name + 'has been defeated! Great job warriors :crossed_swords:')
+            await message.channel.send(enemy.name + ' has been defeated! Great job warriors :crossed_swords:')
             gameRunning = 0
             for x in range(len(playerList)):
               await message.channel.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')     
             await message.channel.send('The next enemy will be the boss monster "GIANT CRAB"')
+            enemy = 0
 
 
 
