@@ -87,6 +87,7 @@ async def on_message(message):
          await message.channel.send(message.author.name + ' has joined the arena!') #sends the name 
          global enemy
          enemy = Enemy('Goblin',len(playerList)*75) #####change this multiplier to something scalable for each
+         await message.channel.send(enemy.name + ' has grown in strength '+ str(enemy.health) + '/' + str(enemy.maxHealth))
             
     else:  
          await message.channel.send(message.author.name + ' has already joined the arena!') #sends the name 
