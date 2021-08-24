@@ -13,7 +13,7 @@ class Enemy:
        self.name = name
        self.maxHealth = maxHealth
        self.health = 0
-      
+       self.alive = 1
 
     def introduce_self(self):
         print(self.name)
@@ -96,7 +96,7 @@ async def on_message(message):
           
           enemy.health = enemy.maxHealth
 
-         else:
+         elif(enemy.alive):
           enemy.health = enemy.health + hpScale
           enemy.maxHealth = enemy.maxHealth + hpScale
           await message.channel.send(enemy.name + ' has grown in strength '+ str(enemy.health) + '/' + str(enemy.maxHealth))
@@ -118,13 +118,14 @@ async def on_message(message):
           enemy.health = enemy.health - int(dmg)
           await message.channel.send(message.author.name + ' has dealt'+ dmg +' damage!')
           await message.channel.send(str(enemy.health) + '/' + str(enemy.maxHealth))
-          if (enemy.health <= 0):
+          if (enemy.health <= 0 and enemy.alive == 1):
             await message.channel.send(enemy.name + ' has been defeated! Great job warriors :crossed_swords:')
             gameRunning = 0
+            enemy.alive = 0
             for x in range(len(playerList)):
               await message.channel.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')     
             await message.channel.send('The next enemy will be the boss monster "GIANT CRAB"')
-            enemy = 0
+            
 
 
 
