@@ -90,6 +90,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "tinydb"
+version = "4.5.1"
+description = "TinyDB is a tiny, document oriented database optimized for your happiness :)"
+category = "main"
+optional = false
+python-versions = ">=3.5,<4.0"
+
+[[package]]
 name = "typing-extensions"
 version = "3.10.0.0"
 description = "Backported and Experimental Type Hints for Python 3.5+"
@@ -112,7 +120,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "8e3982e5893f898e471d7e44f4fcdd31e90ccbdc77fe85d3a7e3be4356430829"
+content-hash = "e18e5c91004d4fef1a6ae0dd0569b76b4a1d413a55024535d3711872f6ec48bc"
 
 [metadata.files]
 aiohttp = [
@@ -216,6 +224,10 @@ multidict = [
     {file = "multidict-5.1.0-cp39-cp39-win32.whl", hash = "sha256:fc13a9524bc18b6fb6e0dbec3533ba0496bbed167c56d0aabefd965584557d80"},
     {file = "multidict-5.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:7df80d07818b385f3129180369079bd6934cf70469f99daaebfac89dca288359"},
     {file = "multidict-5.1.0.tar.gz", hash = "sha256:25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5"},
+]
+tinydb = [
+    {file = "tinydb-4.5.1-py3-none-any.whl", hash = "sha256:99529ea4d5d4b7a3fd4b3f50b48b5023c31d6f7a4a87bb103b4abd1d959d93b9"},
+    {file = "tinydb-4.5.1.tar.gz", hash = "sha256:b780bceac6e37573b10fbcab6bcebb6b8bd5d8a0024533b5a452d9ef83465783"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},
