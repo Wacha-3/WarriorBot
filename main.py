@@ -4,6 +4,7 @@ import tinydb
 import os
 import datetime
 
+from tinydb import TinyDB, Query
 from discord.ext import commands
 
 today = datetime.datetime.now()
@@ -11,7 +12,8 @@ today = datetime.datetime.now()
 playerList = []  #initialise the array
 currentPlayers = []
 bot = commands.Bot(command_prefix='$')
-
+db = TinyDB('db.json')
+User = Query()
 #initiallise an array of minions, and comapre it to date time to decide what enemies will apear 
 class Enemy:
     def __init__(self, name, maxHealth): 
@@ -98,6 +100,12 @@ async def damage(ctx, arg):
     for x in range(len(playerList)):
       await ctx.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')     
       await ctx.send('The next enemy will be the boss monster "GIANT CRAB"')
+
+
+      
+      db.insert({'name': playerList[x].name, 'damage': playerList[x].damageDealt})
+      db.search(User.name == playerList[x].name)
+
         
 
 
@@ -117,10 +125,6 @@ async def bg(ctx):
   await ctx.send(playerList[-1].name)
  # await ctx.send(playerList[UserNumThatSentMsg].name)
   await ctx.send(len(playerList))    
-
-
-
-
 
 
 bot.run(os.getenv("TOKEN"))
