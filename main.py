@@ -2,9 +2,13 @@ import discord  #imports discord library
 import tinydb   #import tinydb library (database)
 import os       #working with operating system
 import datetime
+import sys 
+import subprocess
+import exercise
 
 from tinydb import TinyDB, Query
 from discord.ext import commands
+
 
 today = datetime.datetime.now()
 
@@ -14,7 +18,7 @@ excercise = []
 bot = commands.Bot(command_prefix='$')
 db = TinyDB('db.json')
 User = Query()
-
+ExNum = 9
 
 #initiallise an array of minions, and comapre it to date time to decide what enemies will apear 
 class Enemy:
@@ -23,10 +27,7 @@ class Enemy:
        self.maxHealth = maxHealth
        self.health = 0
        self.alive = 1
-       self.exercise = ""
-
-    def introduce_self(self):
-        print(self.name)
+   
 
 class Excercise:
     def __init__(self, name, minRep, maxRep, hpScale):
@@ -34,35 +35,40 @@ class Excercise:
       self.minRep = minRep #make a list of excerices then use the perams to scale enemy
       self.maxRep = maxRep
       self.hpScale = hpScale
+      
 
 
 class Player:
     def __init__(self, name): 
        self.name = name
        self.damageDealt = 0
-       
-   
-    def introduce_self(self):
-        print(self.name)
 
-""""
-#Method to check if something is an int
-def IsInt(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
-"""
+
 @bot.event
 async def on_ready():
     print('logged in as {0.user}'.format(bot))
    
+""""
+def populateExercises():
+  excerciseList.append(exercise.Exercise("Traps",30,60,150))
+  excerciseList.append(exercise.Exercise("Biceps",8,15,75))
+  excerciseList.append(exercise.Excercise("Shoulders",15,30,100))
+  excerciseList.append(exercise.Excercise("Calves",30,60,150))
+  excerciseList.append(exercise.Excercise("Core",0,500,250))
 
+  excerciseList.append(exercise.Excercise("Back",0,20,100))
+  excerciseList.append(exercise.Excercise("Chest",0,30,100))
+  excerciseList.append(exercise.Excercise("Triceps",0,35,100))
+  excerciseList.append(exercise.Excercise("Thighs",0,35,200))
+
+populateExercises()
+"""
+#Sets the excercise which entails different peramiters
 @bot.command(name='ex')
-async def ex(ctx, arg): #yooooooooooooooooo echooooooo
+async def ex(ctx, arg): 
   author = str(ctx.author)[:-5] 
   global ExNum 
+  
   excercise.append(Excercise("Traps",30,60,150))
   excercise.append(Excercise("Biceps",8,15,75))
   excercise.append(Excercise("Shoulders",15,30,100))
@@ -73,57 +79,71 @@ async def ex(ctx, arg): #yooooooooooooooooo echooooooo
   excercise.append(Excercise("Chest",0,30,100))
   excercise.append(Excercise("Triceps",0,35,100))
   excercise.append(Excercise("Thighs",0,35,200))
+  
 
   if arg == "Traps"  or arg == "traps" or arg == "1":
     ExNum = 0
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
   elif arg == "Biceps" or arg == "biceps" or arg == "2" :
     ExNum = 1
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
   elif arg == "Shoulders" or arg == "shoulders" or arg == "3" :
     ExNum = 2
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
   elif arg == "Calves" or arg == "calves" or arg == "4" :
     ExNum = 3
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
   elif arg == "Core" or arg == "core" or arg == "5" :
-    ExNum = 4 
+    ExNum = 4
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep)) 
   elif arg == "Back" or arg == "back" or arg == "6" :
     ExNum = 5
-  elif arg == "Chest" or arg == "chest" or arg == "7" :
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
+  elif arg == "Chest" or arg == "chest" or arg == "Pushups"  or arg == "pushups" or arg == "7" :
     ExNum = 6
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
   elif arg == "Triceps" or arg == "triceps" or arg == "8" :
     ExNum = 7
-  elif arg == "Thighs" or arg == "thighs" or arg == "9" :
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
+  elif arg == "Thighs" or arg == "thighs" or arg == "Squats" or arg == "squats" or arg == "9" :
     ExNum = 8
+    await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
   else:
     await ctx.send(author + " has entered an invalid Excercise")
-  await ctx.send(author + " has said " + arg)
-  await ctx.send(author + " has set the excercise to " + excercise[ExNum].name)
+  
+  await ctx.message.delete()
 
 
+
+#This sets up the player with a temporary scorekeeping in the arena
 @bot.command(name='join')
 async def join(ctx):
   global ExNum 
   author = str(ctx.author)[:-5] 
-  if currentPlayers.count(author) == 0:
+  if ExNum == 9:
+    await ctx.send('Please set an excercise before joining')
+  elif ExNum >= 0 and ExNum <=8:
+    if currentPlayers.count(author) == 0:
+       playerList.append(Player(author)) #append the array and create a Player object
+       currentPlayers.append(author) 
+       await ctx.send(author + ' has joined the arena!') #sends the name   
+       global enemy
+       if len(currentPlayers) == 1:
+         enemy = Enemy('Crab',len(playerList)*excercise[ExNum].hpScale)
+         enemy.health = enemy.maxHealth
+         await ctx.send('A ' +enemy.name + ' has apeared in The Arena! :crossed_swords: '+ str(enemy.health) + '/' + str(enemy.maxHealth))
+       elif(enemy.alive):
+        enemy.health = enemy.health + excercise[ExNum].hpScale
+        enemy.maxHealth = enemy.maxHealth + excercise[ExNum].hpScale
+        await ctx.send(enemy.name + ' has grown in strength '+ str(enemy.health) + '/' + str(enemy.maxHealth))         
+    else:  
+        await ctx.send(author + ' has already joined The Arena!') 
+  else:
+    await ctx.send('what the fuck did you just do???')
+  await ctx.message.delete()
 
-          playerList.append(Player(author)) #append the array and create a Player object
-          currentPlayers.append(author) 
-          await ctx.send(author + ' has joined the arena!') #sends the name 
-          
-          global enemy
-          if len(currentPlayers) == 1:
-            enemy = Enemy('Crab',len(playerList)*excercise[ExNum].hpScale) #change this multiplier to something scalable for each\
-            await ctx.send('A ' +enemy.name + ' has apeared in the arena! :crossed_swords:')
-            
-            enemy.health = enemy.maxHealth
 
-          elif(enemy.alive):
-            enemy.health = enemy.health + excercise[ExNum].hpScale
-            enemy.maxHealth = enemy.maxHealth + excercise[ExNum].hpScale
-            await ctx.send(enemy.name + ' has grown in strength '+ str(enemy.health) + '/' + str(enemy.maxHealth))
-              
-  else:  
-        await ctx.send(author + ' has already joined the arena!') #sends the name 
-
-
+#Takes an argument which is the ammount of reps/damage that will be dealt to the enemy
 @bot.command(name='d')
 async def damage(ctx, arg):
   global ExNum
@@ -136,54 +156,53 @@ async def damage(ctx, arg):
         elif author == currentPlayers[0]:
           UserNumThatSentMsg = 0
           break
-
    playerList[UserNumThatSentMsg].damageDealt =  playerList[UserNumThatSentMsg].damageDealt + int(arg)    
    enemy.health = enemy.health - int(arg)
-   await ctx.send(author + ' has dealt '+ arg +' damage!')
-   await ctx.send(str(enemy.health) + '/' + str(enemy.maxHealth))
-    
+   await ctx.send(author + ' has dealt '+ arg +' damage! ' + str(enemy.health) + '/' + str(enemy.maxHealth)) 
    if (enemy.health <= 0 and enemy.alive == 1):
      await ctx.send(enemy.name + ' has been defeated! Great job warriors :crossed_swords:')
      enemy.alive = 0
      for x in range(len(playerList)):
-       await ctx.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')     
-    
-     await ctx.send('The next enemy will be the boss monster "GIANT CRAB"')
-
-        
+       await ctx.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total! :muscle: ')          
   else:
-    await ctx.send("Invalid rep range for "+ str(excercise[ExNum].name)  +" it is:" + str(excercise[ExNum].minRep) + " to " + str(excercise[ExNum].maxRep))
-    await ctx.send()
-
+    await ctx.send("Invalid rep range for "+ str(excercise[ExNum].name)  +" it is " + str(excercise[ExNum].minRep) + " to " + str(excercise[ExNum].maxRep)+ "reps") 
+  await ctx.message.delete()
       
-     # db.insert({'name': playerList[x].name, 'damage': playerList[x].damageDealt})
-     # db.search(User.name == playerList[x].name)
 
-        
-
-
+    
+#Displays the current health of the enemy and the excercise name and rep range
 @bot.command(name='hp')
 async def hp(ctx):
   await ctx.send(str(enemy.health) + '/' + str(enemy.maxHealth))
+  await ctx.send(excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
+  await ctx.message.delete()
 
 
-
+#Displays the current total damage for each player
 @bot.command(name='score')
 async def score(ctx):
   for x in range(len(playerList)):
    await ctx.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')
+   
+#adding in code to update to database ---echo
 
-@bot.command(name='bg')
-async def bg(ctx):
-  await ctx.send(playerList[-1].name)
-  # await ctx.send(playerList[UserNumThatSentMsg].name)
-  await ctx.send(len(playerList))    
+@bot.command(name='listex')
+async def listxx(ctx):
+  for x in range(len(excercise)):
+    await ctx.send("")
 
+#Restarts the bot
 @bot.command(name='restart')
 async def restart(ctx):
-  global Exnum
-  enemy.clear()
-  playerList.clear()
-  ExNum=null
+  await ctx.send("Arena is being cleaned up for the next battle!")
+  subprocess.call([sys.executable, os.path.realpath(__file__)] + sys.argv[1:])
+  
+
 
 bot.run(os.getenv("TOKEN")) 
+
+
+
+
+    # db.insert({'name': playerList[x].name, 'damage': playerList[x].damageDealt})
+     # db.search(User.name == playerList[x].name
