@@ -118,6 +118,7 @@ async def ex(ctx, arg):
 #This sets up the player with a temporary scorekeeping in the arena
 @bot.command(name='join')
 async def join(ctx):
+  global enemy
   global ExNum 
   author = str(ctx.author)[:-5] 
   if ExNum == 9:
@@ -127,11 +128,12 @@ async def join(ctx):
        playerList.append(Player(author)) #append the array and create a Player object
        currentPlayers.append(author) 
        await ctx.send(author + ' has joined the arena!') #sends the name   
-       global enemy
+       enemy =  Enemy('Crab',len(playerList)*excercise[ExNum].hpScale)
        if len(currentPlayers) == 1:
          enemy = Enemy('Crab',len(playerList)*excercise[ExNum].hpScale)
          enemy.health = enemy.maxHealth
          await ctx.send('A ' +enemy.name + ' has apeared in The Arena! :crossed_swords: '+ str(enemy.health) + '/' + str(enemy.maxHealth))
+        
        elif(enemy.alive):
         enemy.health = enemy.health + excercise[ExNum].hpScale
         enemy.maxHealth = enemy.maxHealth + excercise[ExNum].hpScale
