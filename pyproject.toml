@@ -7,7 +7,6 @@ authors = ["Wacha <<>>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 discord = "^1.7.3"
-tinydb = "^4.5.1"
 
 [tool.poetry.dev-dependencies]
 
