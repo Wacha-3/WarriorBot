@@ -60,37 +60,46 @@ async def ex(ctx, arg):
   global ExNum 
   global exset
   if exset == 0:
-    exset = 1
+    
     
     async def sendExInfo():
       await ctx.send(author + " has set the excercise to " + excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep)+ " and it scales by " + str(excercise[ExNum].hpScale) + "hp per warrior")
 
     if arg == "Traps"  or arg == "traps" or arg == "1":
       ExNum = 0
+      exset = 1
       await sendExInfo()
     elif arg == "Biceps" or arg == "biceps" or arg == "Bicep" or arg == "bicep" or arg == "2" :
       ExNum = 1
+      exset = 1
       await sendExInfo()
     elif arg == "Shoulders" or arg == "shoulders" or arg == "3" :
       ExNum = 2
+      exset = 1
       await sendExInfo()
     elif arg == "Calves" or arg == "calves" or arg == "4" :
       ExNum = 3
+      exset = 1
       await sendExInfo()
     elif arg == "Core" or arg == "core" or arg == "5" :
       ExNum = 4
+      exset = 1
       await sendExInfo()
     elif arg == "Back" or arg == "back" or arg == "6" :
       ExNum = 5
+      exset = 1
       await sendExInfo()
     elif arg == "Chest" or arg == "chest" or arg == "Pushups"  or arg == "pushups" or arg == "7" :
       ExNum = 6
+      exset = 1
       await sendExInfo()
     elif arg == "Triceps" or arg == "triceps" or arg == "Tricep" or arg == "tricep" or arg == "8" :
       ExNum = 7
+      exset = 1
       await sendExInfo()
     elif arg == "Thighs" or arg == "thighs" or arg == "Squats" or arg == "squats" or arg == "9" :
       ExNum = 8
+      exset = 1
       await sendExInfo()
     else:
       await ctx.send(author + " has entered an invalid Excercise")
@@ -174,7 +183,7 @@ async def score(ctx):
 #lists excercise
 @bot.command(name='listex', brief="List exercises")
 async def listex(ctx):
-  for x in range(8):
+  for x in range(9):
     await ctx.send(str(x+1) + ". " + excercise[x].name + "  rep range " + str(excercise[x].minRep) + " to " + str(excercise[x].maxRep))
 
 
