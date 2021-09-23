@@ -183,9 +183,11 @@ async def score(ctx):
 #lists excercise
 @bot.command(name='listex', brief="List exercises")
 async def listex(ctx):
+  exString = ""
   for x in range(9):
-    await ctx.send(str(x+1) + ". " + excercise[x].name + "  rep range " + str(excercise[x].minRep) + " to " + str(excercise[x].maxRep))
-
+   # await ctx.send("`" +str(x+1) + ". " + excercise[x].name + "  rep range " + str(excercise[x].minRep) + " to " + str(excercise[x].maxRep) + "`")
+    exString = exString  +str(x+1) + ". " + excercise[x].name + "  rep range " + str(excercise[x].minRep) + " to " + str(excercise[x].maxRep) + "\n"
+  await ctx.send("`" + exString + "`")
 
 #Restarts the bot
 @bot.command(name='restart',  brief="Restarts the bot")
