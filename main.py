@@ -1,12 +1,11 @@
 import os       #working with operating system
-import datetime
 import sys 
 import subprocess
 
 from discord.ext import commands
 
 
-today = datetime.datetime.now()
+
 
 playerList = []  #initialise the array
 currentPlayers = []
@@ -49,7 +48,6 @@ async def on_ready():
     excercise.append(Excercise("Chest",0,30,100))
     excercise.append(Excercise("Triceps",0,35,100))
     excercise.append(Excercise("Thighs",0,35,200))
-    
 
 
 #Sets the excercise which entails different peramiters
@@ -107,6 +105,10 @@ async def ex(ctx, arg):
     await ctx.send("An excercise has already been set!")
 
 
+@bot.command(name='arenastart', brief="Summons the Warriors")    
+async def arenastart(ctx):
+  await ctx.send("@everyone rise and grind Warriors The Arena calls! :crossed_swords: ")
+
 
 #This sets up the player with a temporary scorekeeping in the arena
 @bot.command(name='join',brief="Join the battle!")
@@ -159,30 +161,53 @@ async def damage(ctx, arg):
      for x in range(len(playerList)):
        await ctx.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total! :muscle: ')          
   else:
-    await ctx.send("Invalid rep range for "+ str(excercise[ExNum].name)  +" it is " + str(excercise[ExNum].minRep) + " to " + str(excercise[ExNum].maxRep)+ "reps") 
+     await ctx.send("Invalid rep range for "+ str(excercise[ExNum].name)  +" it is " + str(excercise[ExNum].minRep) + " to " + str(excercise[ExNum].maxRep)+ "reps") 
   
 
-    
+#Takes an argument which is the ammount of reps/damage that will be dealt to the enemy
+@bot.command(name='p', brief="the opposide of d")
+async def p(ctx, arg):
+  global ExNum
+  author = str(ctx.author)[:-5] 
+  if int(arg) >= excercise[ExNum].minRep and int(arg) <= excercise[ExNum].maxRep:
+   for x in range(len(currentPlayers)):  
+        if author == currentPlayers[x]:
+          UserNumThatSentMsg = x
+          break
+        elif author == currentPlayers[0]:
+          UserNumThatSentMsg = 0
+          break
+   playerList[UserNumThatSentMsg].damageDealt =  playerList[UserNumThatSentMsg].damageDealt + int(arg)    
+   enemy.health = enemy.health + int(arg)
+   await ctx.send(author + ' has healed '+ arg +' damage! ' + str(enemy.health) + '/' + str(enemy.maxHealth))           
+  else:
+    await ctx.send("Invalid rep range for "+ str(excercise[ExNum].name)  +" it is " + str(excercise[ExNum].minRep) + " to " + str(excercise[ExNum].maxRep)+ " reps") 
+
+
 #Displays the current health of the enemy and the excercise name and rep range
 @bot.command(name='hp', brief="Report current hp")
 async def hp(ctx):
   await ctx.send(str(enemy.health) + '/' + str(enemy.maxHealth))
   await ctx.send(excercise[ExNum].name + " rep range is " + str(excercise[ExNum].minRep) + "-" + str(excercise[ExNum].maxRep))
  
+@bot.command(name='hpset', brief="Set current hp")
+async def hpset(ctx, arg): 
+   enemy.health = int(arg)
+   await ctx.send("The "+ enemy.name + "health has been set to" + str(enemy.health) + '/' + str(enemy.maxHealth))
 
-
+  
 #Displays the current total damage for each player
 @bot.command(name='score', brief="Displays the current damage dealt by Warriors in The Arena")
 async def score(ctx):
-  
+  await ctx.send("__"+str(excercise[ExNum].name) + " minion__")
   for x in range(len(playerList)):
    #print(playerList[x].name) --debug--
-   await ctx.send(playerList[x].name + ' has dealt '+ str(playerList[x].damageDealt) +' damage in total!')
-   
+   await ctx.send(playerList[x].name + ' - '+ str(playerList[x].damageDealt))
+    
 
 #lists excercise
-@bot.command(name='listex', brief="List exercises")
-async def listex(ctx):
+@bot.command(name='exlist', brief="List exercises")
+async def exlist(ctx):
   exString = ""
   for x in range(9):
    # await ctx.send("`" +str(x+1) + ". " + excercise[x].name + "  rep range " + str(excercise[x].minRep) + " to " + str(excercise[x].maxRep) + "`")
